@@ -46,6 +46,10 @@ public class SubscriberSampler extends BaseMQTTSampler implements
 	//Next timeout refers to the sampler as a whole - not to be confused
 	//with the connection timeout which refers to the sampler's 
 	//paho client connection with the broker 
+	private static final String KEEPALIVE_INTERVAL = "mqtt.keepalive_interval"; // $NON-NLS-1$
+    private static final String KEEPALIVE_INTERVAL_DEFAULT = "0"; // $NON-NLS-1$
+    private static final String MAX_QOS = "mqtt.maxqos"; // $NON-NLS-1$
+    private static final String MAX_QOS_DEFAULT = "0"; // $NON-NLS-1$
 	private static final String SAMPLER_TIMEOUT = "mqtt.sampler.timeout"; // $NON-NLS-1$
 	private static final String SAMPLER_TIMEOUT_DEFAULT = "30000"; // $NON-NLS-1$
 	//private static final String QUALITY = "mqtt.quality"; //$NON-NLS-1$
@@ -108,7 +112,24 @@ public class SubscriberSampler extends BaseMQTTSampler implements
 	public void setSamplerTimeout(String timeout) {
 		setProperty(SAMPLER_TIMEOUT, timeout, SAMPLER_TIMEOUT_DEFAULT);
 	}
+	
+    public void setKeepAliveInterval(String second) {
+        setProperty(KEEPALIVE_INTERVAL, second, KEEPALIVE_INTERVAL_DEFAULT);
+    }
+    
+    public void setMaxQoS(String qos) {
+        setProperty(MAX_QOS, qos);
+    }
+    
 
+    public String getKeepAliveInterval() {
+        return getPropertyAsString(KEEPALIVE_INTERVAL,KEEPALIVE_INTERVAL_DEFAULT);
+    }
+    
+    public String getMaxQoS() {
+        return getPropertyAsString(MAX_QOS);
+    }
+    
 	public String getDurableSubscriptionId() {
 		return getPropertyAsString(DURABLE_SUBSCRIPTION_ID);
 	}
@@ -241,12 +262,16 @@ public class SubscriberSampler extends BaseMQTTSampler implements
 		String aggregate = "" + getIterationCount();
 		String clientId = getClientId();
 		String samplerTimeout = this.getSamplerTimeout();
+		String keepaliveinterval = this.getKeepAliveInterval();
+		String qos = this.getMaxQoS();
 		Arguments parameters = new Arguments();
 		parameters.addArgument("SAMPLER_NAME", this.getName());
 		parameters.addArgument("HOST", host);
 		parameters.addArgument("CLIENT_ID", clientId);
 		parameters.addArgument("CONNECTION_TIMEOUT", ""+getConnectionTimeout());
 		parameters.addArgument("TOPIC", list_topic);
+		parameters.addArgument("KEEPALIVE", keepaliveinterval);
+		parameters.addArgument("MAXQOS", qos);
 		// ------------------------Strategy-----------------------------------//
 		if (MQTTPublisherGui.ROUND_ROBIN.equals(this.getSTRATEGY())) {
 			parameters.addArgument("STRATEGY", "ROUND_ROBIN");

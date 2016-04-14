@@ -72,6 +72,8 @@ public class MQTTSubscriberGui extends AbstractSamplerGui implements ChangeListe
     private final JCheckBox cleanSession = new JCheckBox(JMeterUtils.getResString("mqtt_clean_session"), true); // $NON-NLS-1$
     private final JLabeledTextField iterations = new JLabeledTextField(	JMeterUtils.getResString("mqtt_itertions")); //$NON-NLS-1$
     private final JLabeledTextField connectionTimeout = new JLabeledTextField(	JMeterUtils.getResString("mqtt_connection_timeout")); //$NON-NLS-1$
+    private final JLabeledTextField keepAliveInterval = new JLabeledTextField(  JMeterUtils.getResString("mqtt_keep_alive_interval"));
+    private final JLabeledRadioI18N maxQoS = new JLabeledRadioI18N("mqtt_qos", QTYPES_ITEMS, AT_MOST_ONCE); //$NON-NLS-1$
     
     public MQTTSubscriberGui() {
         init();
@@ -118,6 +120,8 @@ public class MQTTSubscriberGui extends AbstractSamplerGui implements ChangeListe
         //sampler.setSTRATEGY(this.topicChoice.getText());
         //sampler.setQuality(typeQoSValue.getText());
         sampler.setCLEANSESSION(cleanSession.isSelected());
+        sampler.setMaxQoS(maxQoS.getText());
+        sampler.setKeepAliveInterval(keepAliveInterval.getText());
         
     }
 
@@ -139,6 +143,9 @@ public class MQTTSubscriberGui extends AbstractSamplerGui implements ChangeListe
 		ControlPanel.add(cleanSession);
 		ControlPanel.add(createAuthPane());
 		ControlPanel.add(connectionTimeout);
+		ControlPanel.add(keepAliveInterval);
+		maxQoS.setLayout(new BoxLayout(maxQoS, BoxLayout.X_AXIS));
+		ControlPanel.add(maxQoS);
 		ControlPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.gray),"Connection Info"));
 		mainPanel.add(ControlPanel);	
 		JPanel TPanel = new VerticalPanel();
@@ -187,6 +194,8 @@ public class MQTTSubscriberGui extends AbstractSamplerGui implements ChangeListe
         samplerTimeout.setText(sampler.getSamplerTimeout());  
         iterations.setText(sampler.getIterations());
         connectionTimeout.setText(""+sampler.getConnectionTimeout());
+        keepAliveInterval.setText(""+sampler.getKeepAliveInterval());
+        maxQoS.setText(sampler.getMaxQoS());
         cleanSession.setSelected(Boolean.parseBoolean(sampler.getCLEANSESSION()));
         //typeQoSValue.setText(sampler.getQuality());
     }
@@ -203,6 +212,8 @@ public class MQTTSubscriberGui extends AbstractSamplerGui implements ChangeListe
         iterations.setText("1");// $NON-NLS-1$
         separator.setText(""); // $NON-NLS-1$
         connectionTimeout.setText("5000"); // $NON-NLS-1$
+        keepAliveInterval.setText("0");
+        maxQoS.setText(AT_MOST_ONCE);
         useAuth.setSelected(false);
         mqttUser.setEnabled(false);
         mqttPwd.setEnabled(false);

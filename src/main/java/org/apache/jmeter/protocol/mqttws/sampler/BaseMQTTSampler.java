@@ -37,6 +37,7 @@ public abstract class BaseMQTTSampler extends AbstractSampler {
     private static final String TEXT_MSG = "mqtt.text_message"; //$NON-NLS-1$
     private static final String CONNECTION_TIMEOUT = "mqtt.connection_timeout"; // $NON-NLS-1$
 	private static final String CONNECTION_TIMEOUT_DEFAULT = "5000"; // $NON-NLS-1$
+	
 	private static final String PUBLISHER_THROTTLE = "mqtt.publisher_throttle"; // $NON-NLS-1$
 	private static final String PUBLISHER_THROTTLE_DEFAULT = "100"; // $NON-NLS-1$
 	private static final String CLEAN_SESSION="mqtt.clean.session";//$NON-NLS-1$
@@ -160,6 +161,7 @@ public abstract class BaseMQTTSampler extends AbstractSampler {
         setProperty(CONNECTION_TIMEOUT, count, CONNECTION_TIMEOUT_DEFAULT);
     }
     
+    
     /**
      * set interval between successive publish messages 
      *
@@ -178,7 +180,7 @@ public abstract class BaseMQTTSampler extends AbstractSampler {
     public String getConnectionTimeout() {
         return getPropertyAsString(CONNECTION_TIMEOUT,CONNECTION_TIMEOUT_DEFAULT);
     }
-
+    
     /**
      * get connection timeout as int
      *
